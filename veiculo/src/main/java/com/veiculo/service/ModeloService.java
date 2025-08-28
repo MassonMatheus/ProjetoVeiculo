@@ -1,0 +1,46 @@
+package com.veiculo.service;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.veiculo.Entity.Modelo;
+import com.veiculo.dto.ModeloDTO;
+import com.veiculo.mapper.ModeloMapper;
+import com.veiculo.repository.ModeloRepository;
+
+
+
+@Service
+public class ModeloService {
+    
+    @Autowired
+    private ModeloRepository repository;
+
+    @Transactional 
+    public ModeloDTO criar (ModeloDTO dto){
+        if(dto.getId() != null){
+            throw new IllegalArgumentException("Modelo deve possuir ID nulo");
+        }
+        if(repository.existsByNome(dto.getNome())){
+            throw new IllegalArgumentException("Ja existe modelo com esse nome");
+        }
+        Modelo salvo = repository.save(ModeloMapper.toEntity(dto));
+        return ModeloMapper.toDTO(salvo);
+    }
+
+    @Transactional (readOnly = true)
+    public List<ModeloDTO> listar(){
+        return ModeloMapper.toDTOList(repository.findAll());
+
+    }
+
+    @Transactional (readOnly = true)
+    public ModeloDTO buscarPorId(Long id){
+        return repository.findById(id)
+                .map(ModeloMapper::toDTO)
+                .orElseThrow(() -> new RuntimeException("Modelo não encontrado"));
+    }
+}

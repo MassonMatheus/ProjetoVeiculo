@@ -1,0 +1,4 @@
+
+USE veiculo;
+
+show tables;
