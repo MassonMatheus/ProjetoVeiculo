@@ -43,4 +43,22 @@ public class ModeloService {
                 .map(ModeloMapper::toDTO)
                 .orElseThrow(() -> new RuntimeException("Modelo não encontrado"));
     }
+
+    @Transactional
+    public ModeloDTO atualizar (Long id, ModeloDTO dto){
+        Modelo existente = repository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Modelo não encontrado"));
+        existente.setNome(dto.getNome());
+        return ModeloMapper.toDTO(repository.save(existente));
+    }
+
+    @Transactional
+    public void deletar (Long id){
+        if (!repository.existsById(id)){
+            throw new RuntimeException("Modelo não encontrado");
+        } else {
+            repository.deleteById(id);
+        }
+    }
+
 }
