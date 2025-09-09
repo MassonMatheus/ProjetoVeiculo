@@ -2,7 +2,7 @@ package com.veiculo.mapper;
 
 
 import com.veiculo.Entity.Modelo;
-import com.veiculo.Entity.veiculo;
+import com.veiculo.Entity.Veiculo;
 import com.veiculo.dto.ModeloDTO;
 import com.veiculo.dto.VeiculoDTO;
 
@@ -11,23 +11,21 @@ public final class VeiculoMapper {
     private VeiculoMapper() {
     }
 
-    /**
-     * Converte uma entidade Veiculo em um DTO.
-     * @param entity A entidade Veiculo que será convertida.
-     * @return Um objeto VeiculoDTO com os dados mapeados.
-     */
-
-    public static VeiculoDTO toDTO(veiculo entity) {
+    public static VeiculoDTO toDTO(Veiculo entity) {
         if (entity == null) return null;
-        ModeloDTO modeloDTO = new ModeloDTO();
-        modeloDTO.setId(entity.getModelo().getId());
-        return new VeiculoDTO(entity.getAno(), entity.getCor(), entity.getDescricao(),
-                entity.getId(), modeloDTO, entity.getPlaca());
-    }
+    
+     return new VeiculoDTO(
+            entity.getAno(),
+            entity.getCor(),
+            entity.getDescricao(),
+            entity.getId(),
+            ModeloMapper.toDTO(entity.getModelo()),
+            entity.getPlaca()
+        );}
    
-    public static veiculo toEntity (VeiculoDTO dto){
+    public static Veiculo toEntity (VeiculoDTO dto){
         if (dto == null) return null;
-        veiculo v = new veiculo();
+        Veiculo v = new Veiculo();
         v.setId(dto.getId());
         v.setPlaca(dto.getPlaca());
         v.setCor(dto.getCor());

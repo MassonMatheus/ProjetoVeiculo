@@ -13,7 +13,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
 @Entity
-public class veiculo {
+public class Veiculo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,10 +39,10 @@ public class veiculo {
     @JoinColumn(name = "modelo_id", nullable = false)
     private Modelo modelo;
 
-    public veiculo() {
+    public Veiculo() {
     }
 
-    public veiculo(Long id, String placa, String cor, Integer ano, String descricao, LocalDateTime dataCadastro,
+    public Veiculo(Long id, String placa, String cor, Integer ano, String descricao, LocalDateTime dataCadastro,
             Modelo modelo) {
         this.id = id;
         this.placa = placa;
