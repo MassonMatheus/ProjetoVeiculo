@@ -15,50 +15,51 @@ import com.veiculo.repository.ModeloRepository;
 
 @Service
 public class ModeloService {
-    
+
     @Autowired
     private ModeloRepository repository;
 
-    @Transactional 
+    @Transactional
     public ModeloDTO criar (ModeloDTO dto){
-        if(dto.getId() != null){
-            throw new IllegalArgumentException("Modelo deve possuir ID nulo");
+        if(dto.getId() != null) {
+            throw new IllegalArgumentException("ID deve ser nulo ao criar um novo modelo.");
         }
-        if(repository.existsByNome(dto.getNome())){
-            throw new IllegalArgumentException("Ja existe modelo com esse nome");
+        if(repository.existsByNome(dto.getNome())) {
+            throw new IllegalArgumentException("Modelo com o nome " + dto.getNome() + " já existe.");
         }
         Modelo salvo = repository.save(ModeloMapper.toEntity(dto));
-        return ModeloMapper.toDTO(salvo);
+        
+        return ModeloMapper.toDto(salvo);
     }
 
     @Transactional (readOnly = true)
     public List<ModeloDTO> listar(){
-        return ModeloMapper.toDTOList(repository.findAll());
-
+        return ModeloMapper.toDtoList(repository.findAll());
     }
 
     @Transactional (readOnly = true)
     public ModeloDTO buscarPorId(Long id){
         return repository.findById(id)
-                .map(ModeloMapper::toDTO)
-                .orElseThrow(() -> new RuntimeException("Modelo não encontrado"));
+                .map(ModeloMapper::toDto)
+                .orElseThrow(() -> new RuntimeException("Modelo com ID " + id + " não encontrado."));
     }
 
-    @Transactional
+    @Transactional (readOnly = true)
     public ModeloDTO atualizar (Long id, ModeloDTO dto){
         Modelo existente = repository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Modelo não encontrado"));
+                .orElseThrow(() -> new RuntimeException("Modelo com ID " + id + " não encontrado."));
         existente.setNome(dto.getNome());
-        return ModeloMapper.toDTO(repository.save(existente));
+        return ModeloMapper.toDto(repository.save(existente));
     }
 
     @Transactional
     public void deletar (Long id){
-        if (!repository.existsById(id)){
-            throw new RuntimeException("Modelo não encontrado");
-        } else {
+        if(!repository.existsById(id)){
+            throw new RuntimeException("Modelo com ID " + id + " não encontrado.");
+        }else {
             repository.deleteById(id);
         }
     }
+
 
 }

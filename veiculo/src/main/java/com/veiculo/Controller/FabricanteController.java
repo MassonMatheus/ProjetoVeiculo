@@ -1,5 +1,6 @@
 package com.veiculo.Controller;
 
+import java.net.URI;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.veiculo.dto.FabricanteDTO;
 import com.veiculo.service.FabricanteService;
@@ -23,13 +25,12 @@ public class FabricanteController {
     @Autowired
     private FabricanteService service;
 
-
     @PostMapping
     public ResponseEntity<FabricanteDTO> criar (@RequestBody FabricanteDTO dto){
         FabricanteDTO criado = service.criar(dto);
-       // URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-        //    .path("/{id}").buildAndExpand(criado.getId()).toUri();
-        return ResponseEntity.created(null).body(criado);
+         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+            .path("/{id}").buildAndExpand(criado.getId()).toUri();
+        return ResponseEntity.created(location).body(criado);
     }
 
     @GetMapping
@@ -38,20 +39,19 @@ public class FabricanteController {
     }
 
     @GetMapping("/{id}")
-    public FabricanteDTO buscar(@PathVariable Long id){
+    public FabricanteDTO buscar (@PathVariable Long id, @RequestBody FabricanteDTO dto){
         return service.buscarPorId(id);
     }
 
     @PutMapping("/{id}")
-    public FabricanteDTO atualizar(@PathVariable Long id, @RequestBody FabricanteDTO dto){
+    public FabricanteDTO atualizar (@PathVariable Long id, @RequestBody FabricanteDTO dto){
         return service.atualizar(id, dto);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable Long id){
+    public ResponseEntity<Void> deletar (@PathVariable Long id){
         service.deletar(id);
         return ResponseEntity.noContent().build();
     }
 
 }
-

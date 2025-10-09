@@ -1,4 +1,2 @@
-
-USE veiculo;
-
-show tables;
+CREATE DATABASE veiculo1; 
+USE veiculo1;

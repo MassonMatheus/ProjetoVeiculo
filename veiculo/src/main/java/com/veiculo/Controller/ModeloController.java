@@ -16,11 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.veiculo.dto.ModeloDTO;
 import com.veiculo.service.ModeloService;
 
-
 @RestController
 @RequestMapping("/api/modelos")
 public class ModeloController {
-
+    
     @Autowired
     private ModeloService service;
 
@@ -29,28 +28,26 @@ public class ModeloController {
         ModeloDTO criado = service.criar(dto);
         return ResponseEntity.created(null).body(criado);
     }
-    
+
     @GetMapping
     public List<ModeloDTO> listar(){
         return service.listar();
     }
 
     @GetMapping("/{id}")
-    public ModeloDTO buscar(@PathVariable Long id){
+    public ModeloDTO buscar (@PathVariable Long id){
         return service.buscarPorId(id);
-        
     }
 
     @PutMapping("/{id}")
-    public ModeloDTO atualizar(@PathVariable Long id, @RequestBody ModeloDTO dto){
+    public ModeloDTO atualizar (@PathVariable Long id, @RequestBody ModeloDTO dto){
         return service.atualizar(id, dto);
     }
-    
+
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable Long id){
+    public ResponseEntity<Void> deletar (@PathVariable Long id){
         service.deletar(id);
         return ResponseEntity.noContent().build();
     }
-
 
 }
