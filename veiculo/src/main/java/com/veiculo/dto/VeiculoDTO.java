@@ -1,26 +1,22 @@
 package com.veiculo.dto;
 
-
-
-
 public class VeiculoDTO {
     private Long id;
     private String placa;
     private String cor;
     private Integer ano;
     private String descricao;
-    private ModeloDTO modeloDTO;
+    private ModeloDTO modelo;
 
-    public VeiculoDTO() {
-    }
+    public VeiculoDTO() {}
 
-    public VeiculoDTO(Integer ano, String cor, String descricao, Long id, ModeloDTO modeloDTO, String placa) {
-        this.ano = ano;
-        this.cor = cor;
-        this.descricao = descricao;
+    public VeiculoDTO(Long id, String placa, String cor, Integer ano, String descricao, ModeloDTO modelo) {
         this.id = id;
-        this.modeloDTO = modeloDTO;
         this.placa = placa;
+        this.cor = cor;
+        this.ano = ano;
+        this.descricao = descricao;
+        this.modelo = modelo;
     }
 
     public Long getId() {
@@ -63,12 +59,13 @@ public class VeiculoDTO {
         this.descricao = descricao;
     }
 
-    public ModeloDTO getModeloDTO() {
-        return modeloDTO;
+    public ModeloDTO getModelo() {
+        return modelo;
     }
 
-    public void setModeloDTO(ModeloDTO modeloDTO) {
-        this.modeloDTO = modeloDTO;
+    public void setModelo(ModeloDTO modelo) {
+        this.modelo = modelo;
     }
+
     
 }

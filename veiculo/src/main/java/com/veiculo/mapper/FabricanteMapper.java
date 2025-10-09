@@ -6,35 +6,37 @@ import java.util.stream.Collectors;
 import com.veiculo.Entity.Fabricante;
 import com.veiculo.dto.FabricanteDTO;
 
-public final class FabricanteMapper {
 
+public final class FabricanteMapper {
+    
     private FabricanteMapper(){}
 
-    public static FabricanteDTO toDTO(Fabricante entity){
-        if (entity == null) return null;
-        return new FabricanteDTO(entity.getId(), entity.getNome(), entity.getPaisOrigem());
+    public static FabricanteDTO toDto(Fabricante entity){
+        if(entity == null) return null;
+        FabricanteDTO dto = new FabricanteDTO();
+        dto.setId(entity.getId());
+        dto.setNome(entity.getNome());
+        dto.setPaisOrigem(entity.getPaisOrigem());
+
+        return dto;
     }
 
     public static Fabricante toEntity(FabricanteDTO dto){
         if(dto == null) return null;
-        Fabricante f = new Fabricante();
-        f.setId(dto.getId());
-        f.setNome(dto.getNome());
-        f.setPaisOrigem(dto.getPaisOrigem());
-        return f;
+        
+        return new Fabricante(dto.getId(), dto.getNome(), dto.getPaisOrigem());
     }
-    public static List<FabricanteDTO> toDTOList(List<Fabricante> list){
-        return list == null ? 
-                    List.of() :
-                    list.stream().map(FabricanteMapper::toDTO).collect(Collectors.toList());
+
+    public static List<FabricanteDTO> toDtoList(List<Fabricante> list){
+        return list == null ?
+            List.of() :
+            list.stream().map(FabricanteMapper::toDto).collect(Collectors.toList());
     }
 
     public static List<Fabricante> toEntityList(List<FabricanteDTO> list){
-        return list == null ? 
-                    List.of() :
-                    list.stream().map(FabricanteMapper::toEntity).collect(Collectors.toList());
+        return list == null ?
+            List.of() :
+            list.stream().map(FabricanteMapper::toEntity).collect(Collectors.toList());
     }
-
-
 
 }

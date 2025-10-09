@@ -4,9 +4,8 @@ public class FabricanteDTO {
     private Long id;
     private String nome;
     private String paisOrigem;
-    
-    public FabricanteDTO() {
-    }
+
+    public FabricanteDTO() {}
 
     public FabricanteDTO(Long id, String nome, String paisOrigem) {
         this.id = id;
@@ -38,4 +37,5 @@ public class FabricanteDTO {
         this.paisOrigem = paisOrigem;
     }
 
+    
 }

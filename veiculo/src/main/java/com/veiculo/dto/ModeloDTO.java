@@ -1,17 +1,16 @@
 package com.veiculo.dto;
 
 public class ModeloDTO {
-    private Long id; 
+    private Long id;
     private String nome;
-    private FabricanteDTO fabricanteDTO;
+    private FabricanteDTO fabricante;
 
-    public ModeloDTO(){
-    }
+    public ModeloDTO() {}
 
-    public ModeloDTO(FabricanteDTO fabricanteDTO, Long id, String nome) {
-        this.fabricanteDTO = fabricanteDTO;
+    public ModeloDTO(Long id, String nome, FabricanteDTO fabricante) {
         this.id = id;
         this.nome = nome;
+        this.fabricante = fabricante;
     }
 
     public Long getId() {
@@ -30,16 +29,11 @@ public class ModeloDTO {
         this.nome = nome;
     }
 
-    public FabricanteDTO getFabricanteDTO() {
-        return fabricanteDTO;
+    public FabricanteDTO getFabricante() {
+        return fabricante;
     }
 
-    public void setFabricanteDTO(FabricanteDTO fabricanteDTO) {
-        this.fabricanteDTO = fabricanteDTO;
+    public void setFabricante(FabricanteDTO fabricante) {
+        this.fabricante = fabricante;
     }
-
-    
-
-
-    
 }
