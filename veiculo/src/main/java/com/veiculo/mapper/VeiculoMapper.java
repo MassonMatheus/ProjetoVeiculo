@@ -32,7 +32,6 @@ public final class VeiculoMapper {
         dto.getCor(), 
         dto.getAno(), 
         dto.getDescricao(), 
-        null, 
         ModeloMapper.toEntity(dto.getModelo()));  
     }
 

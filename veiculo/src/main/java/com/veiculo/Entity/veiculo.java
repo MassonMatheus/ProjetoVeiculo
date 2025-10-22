@@ -1,8 +1,5 @@
 package com.veiculo.Entity;
 
-import java.time.LocalDateTime;
-
-import org.hibernate.annotations.CreationTimestamp;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -31,10 +28,6 @@ public class Veiculo {
     @Column(length = 500)
     private String descricao;
 
-    @CreationTimestamp 
-    @Column(name = "data_cadastro", nullable = false, updatable = false)
-    private LocalDateTime dataCadastro;
-
     @ManyToOne
     @JoinColumn(name = "modelo_id", nullable = false)
     private Modelo modelo;
@@ -42,14 +35,13 @@ public class Veiculo {
     public Veiculo() {
     }
 
-    public Veiculo(Long id, String placa, String cor, Integer ano, String descricao, LocalDateTime dataCadastro,
+    public Veiculo(Long id, String placa, String cor, Integer ano, String descricao,
             Modelo modelo) {
         this.id = id;
         this.placa = placa;
         this.cor = cor;
         this.ano = ano;
         this.descricao = descricao;
-        this.dataCadastro = dataCadastro;
         this.modelo = modelo;
     }
 
@@ -93,13 +85,6 @@ public class Veiculo {
         this.descricao = descricao;
     }
 
-    public LocalDateTime getDataCadastro() {
-        return dataCadastro;
-    }
-
-    public void setDataCadastro(LocalDateTime dataCadastro) {
-        this.dataCadastro = dataCadastro;
-    }
 
     public Modelo getModelo() {
         return modelo;

@@ -33,6 +33,14 @@ const criarTabela = function(dados, titulo = "Tabela", classe){
             td.textContent = item[campo];
             tr.appendChild(td);
         });
+
+        //icones
+        const deletar = document.createElement("td");
+        deletar.innerHTML = `<button class="btn-deletar">🗑️</button>`;
+        deletar.addEventListener("click", async function(){
+            alert(`Deletar fabricante: ${item.id}`);
+        });
+        tr.appendChild(deletar);
         tbody.appendChild(tr);
     });
     tabela.appendChild(tbody);

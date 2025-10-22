@@ -41,14 +41,13 @@ public class VeiculoService {
                 .orElseThrow(() -> new RuntimeException("Veículo com ID " + id + " não encontrado."));
     }
 
-    @Transactional (readOnly = true)
+    //@Transactional (readOnly = true)
     public VeiculoDTO atualizar (Long id, VeiculoDTO dto){
         Veiculo existente = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Veículo com ID " + id + " não encontrado."));
         existente.setPlaca(dto.getPlaca());
         existente.setCor(dto.getCor());
         existente.setAno(dto.getAno());
-        existente.setDescricao(dto.getDescricao());
         return VeiculoMapper.toDto(repository.save(existente));
     }
 
