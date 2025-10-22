@@ -15,7 +15,6 @@ public class VeiculoDTO {
         this.placa = placa;
         this.cor = cor;
         this.ano = ano;
-        this.descricao = descricao;
         this.modelo = modelo;
     }
 

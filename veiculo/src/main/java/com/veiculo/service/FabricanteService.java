@@ -41,7 +41,7 @@ public class FabricanteService {
                 .orElseThrow(() -> new RuntimeException("Fabricante com ID " + id + " não encontrado."));
     }
 
-    @Transactional (readOnly = true)
+   //@Transactional (readOnly = true)
     public FabricanteDTO atualizar (Long id, FabricanteDTO dto){
         Fabricante existente = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Fabricante com ID " + id + " não encontrado."));

@@ -44,7 +44,7 @@ public class ModeloService {
                 .orElseThrow(() -> new RuntimeException("Modelo com ID " + id + " não encontrado."));
     }
 
-    @Transactional (readOnly = true)
+    //@Transactional (readOnly = true)
     public ModeloDTO atualizar (Long id, ModeloDTO dto){
         Modelo existente = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Modelo com ID " + id + " não encontrado."));
@@ -56,9 +56,13 @@ public class ModeloService {
     public void deletar (Long id){
         if(!repository.existsById(id)){
             throw new RuntimeException("Modelo com ID " + id + " não encontrado.");
-        }else {
-            repository.deleteById(id);
         }
+        
+        if(repository.temVeiculoAssociado(id)){
+            throw new RuntimeException("Não é possível deletar o modelo com ID " + id + " pois existem veículos associados a ele.");
+        }
+        
+        repository.deleteById(id);
     }
 
 
