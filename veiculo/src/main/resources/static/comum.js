@@ -34,20 +34,26 @@ async function setDeletar (url){
         return {error: true, message: "Erro de conexão: " + error.message};
     }
 
-    //async function isSucess(response){
-       // return response && !response.error;
-    //}
-
-    //async function mostrarErro(response){
-        //if(response.message){
-            
-       // }
-    //}
-       
-
-
-
-
-
 }
 
+async function setPost(url){
+    try{
+        const response = await fetch(url, {
+            method: 'POST',
+            body: JSON.stringify(fabricante),
+    });
+    if (!response.ok){
+        return {sucess: true, message: "Criado com Sucesso"};
+    }else{
+        try{
+            const error = await response.json();
+            return {error: true, status: response.status, ...error};
+        }catch{
+            return{error: true, status: response.status, message: response.statusText};
+            }
+        }
+    }catch (error){
+        return {error: true, message: "Erro de conexão: " + error.message};
+    }
+
+}

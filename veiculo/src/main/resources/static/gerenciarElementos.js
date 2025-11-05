@@ -7,8 +7,8 @@ const criarTabela = function(dados, titulo = "Tabela", classe){
 
     const trTitle = document.createElement("tr");
     const th = document.createElement("th");
-    th.textContent = titulo;
-    th.colSpan = cabecalho.length;
+    th.textContent = "Fabricantes";
+    th.colSpan = 5;
     trTitle.appendChild(th);
     thead.appendChild(trTitle);
 
