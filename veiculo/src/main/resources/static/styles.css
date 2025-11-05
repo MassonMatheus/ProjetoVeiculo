@@ -124,6 +124,68 @@ table tbody tr:hover {
   cursor: pointer; /* Mostra o cursor como "pointer" ao passar o mouse */
 }
 
+#modal{
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  z-index: 1000;
+  height: auto;
+}
+
+#close-modal{
+  position: absolute;
+  top: 15px;
+  right: 10px;
+  cursor: pointer;
+}
+
+#form-fabricante {
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+}
+
+#form-modelo input,
+#form-fabricante input {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+}
+
+#form-modelo label,
+#form-fabricante label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 600;
+}
+
+#form-modelo select,
+#form-fabricante select{
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+}
+
+#form-modelo button,
+#form-fabricante button {
+  background: var(--brand-mid);
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+}
+
 /* Ajuste para tabelas em telas pequenas */
 @media (max-width: 768px) {
   table {
