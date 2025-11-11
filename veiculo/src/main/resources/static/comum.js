@@ -14,7 +14,7 @@ async function getData(url) {
     }
 }
 
-async function setDeletar (url){
+async function setDeletar(url){
     try{
         const response = await fetch (url, {
             method: 'DELETE',
@@ -36,24 +36,29 @@ async function setDeletar (url){
 
 }
 
-async function setPost(url){
+async function postData(url, data){
     try{
         const response = await fetch(url, {
             method: 'POST',
-            body: JSON.stringify(fabricante),
+            headers: {"content-type": "application/json"},
+            body: JSON.stringify(data)
     });
     if (!response.ok){
-        return {sucess: true, message: "Criado com Sucesso"};
-    }else{
-        try{
-            const error = await response.json();
-            return {error: true, status: response.status, ...error};
-        }catch{
-            return{error: true, status: response.status, message: response.statusText};
+        const contentType = response.headers.get("content-type");
+        if(contentType && contentType.includes("application/json")){
+            return await response.json();
+            }else{
+                return await response.text();
+            }
+        }else {
+            try{
+                const error = await response.json();
+                return {error: true, status: response.status, ...error};
+            }catch{
+                return{error: true, status: response.status, message: response.statusText};
             }
         }
-    }catch (error){
+    } catch (error){
         return {error: true, message: "Erro de conexão: " + error.message};
     }
-
 }

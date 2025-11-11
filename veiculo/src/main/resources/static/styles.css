@@ -145,14 +145,14 @@ table tbody tr:hover {
   cursor: pointer;
 }
 
+#form-modelo,
 #form-fabricante {
   display: flex;
   flex-direction: column;
   margin-top: 20px;
 }
 
-#form-modelo input,
-#form-fabricante input {
+#modal input {
   width: 100%;
   padding: 8px;
   margin-bottom: 10px;
@@ -160,15 +160,13 @@ table tbody tr:hover {
   border-radius: var(--radius-sm);
 }
 
-#form-modelo label,
-#form-fabricante label {
+#modal label {
   display: block;
   margin-bottom: 5px;
   font-weight: 600;
 }
 
-#form-modelo select,
-#form-fabricante select{
+#modal select{
   width: 100%;
   padding: 8px;
   margin-bottom: 10px;
@@ -176,12 +174,21 @@ table tbody tr:hover {
   border-radius: var(--radius-sm);
 }
 
-#form-modelo button,
-#form-fabricante button {
+#modal button {
   background: var(--brand-mid);
   color: white;
   border: none;
   padding: 10px 15px;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+}
+
+.botao-novo{
+  margin-top: 20px;
+  background: var(--brand-accent);
+  color: white;
+  border: none;
+  padding: 10px;
   border-radius: var(--radius-md);
   cursor: pointer;
 }
