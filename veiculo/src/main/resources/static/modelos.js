@@ -11,7 +11,7 @@ const criarTabelaModelo = function(dados){
     trTittle.appendChild(th);
     thead.appendChild(trTittle);
 
-    const cabecalho = ["Modelos", "Fabricante", "País de Origem"];
+    const cabecalho = ["Modelos", "Fabricante", "País de Origem", "Deletar"];
     const tr = document.createElement("tr");
     cabecalho.forEach(function(coluna){
         const th = document.createElement("th");
@@ -43,8 +43,9 @@ const criarTabelaModelo = function(dados){
         tdPaisOrigem.textContent = item.fabricante.paisOrigem;
         tr.appendChild(tdPaisOrigem);
 
-        //icones
+        //ações
         const deletar = document.createElement("td");
+        deletar.textContent = item.deletar;
         deletar.innerHTML = `<button class="btn-deletar">🗑️</button>`;
         deletar.addEventListener("click", async function(){
             const resultado = await setDeletar(`http://localhost:8080/api/modelos/${item.id}`);

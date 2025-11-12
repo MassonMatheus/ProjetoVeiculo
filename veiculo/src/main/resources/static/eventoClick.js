@@ -52,7 +52,6 @@ document.getElementById("novo-modelo").addEventListener("click", async function(
    if(dadosFabricantes.status === 404 || dadosFabricantes.error){
         alert ("Erro ao carregar fabricantes. erro: " + dadosFabricantes.message);
       return;
-
    }
    setRemoverElementos("#fabricante-modelo option");
 
@@ -65,6 +64,30 @@ document.getElementById("novo-modelo").addEventListener("click", async function(
    });
     MODAL.style.display = "block";
     setMostrarOcultarElemento(false, ".modal-content-modelo");
+});
+
+document.getElementById("salvar-modelo").addEventListener("click", async function(event){
+    event.preventDefault();
+    const nome = document.getElementById("nome-modelo").value;
+    const fabricante = document.getElementById("fabricante-modelo").value;
+    const novoModelo = {nome: nome, fabricante: {id: fabricante}};   
+
+    const resultado = await postData("http://localhost:8080/api/modelos", novoModelo);
+    if(resultado.status === 201){
+        alert("Modelo salvo com sucesso!");
+        document.getElementById("nome-modelo").value = "";
+        document.getElementById("fabricante-modelo").value = "";
+        MODAL.style.display = "none";
+
+        setRemoverElementos(".tabela-dados");
+        document.querySelector("#modelos").style.display = "block";
+        const dadosModelos = await getData("http://localhost:8080/api/modelos");
+        document.querySelector("#modelos").appendChild(criarTabelaModelo(dadosModelos));
+    
+    }else{
+        alert ("Erro ao salvar modelo. erro: " + resultado.message);
+    }
+
 });
 
 

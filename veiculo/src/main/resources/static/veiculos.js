@@ -10,7 +10,7 @@ const criarTabelaVeiculo = function(dados){
     trTittle.appendChild(th);
     thead.appendChild(trTittle);
 
-const cabecalho = ["Modelo", "Fabricante", "País de Origem","Placa", "Cor", "Ano", "Descrição"];
+const cabecalho = ["Modelo", "Fabricante", "País de Origem","Placa", "Cor", "Ano", "Descrição", "Deletar"];
 const tr = document.createElement("tr");
 cabecalho.forEach(function(campo){
     const th = document.createElement("th");
@@ -60,20 +60,19 @@ dados.forEach(function(item){
     tdDescricao.textContent = item.descricao;
     tr.appendChild(tdDescricao);
 
-    //icones
+    //deletar
     const deletar = document.createElement("td");
+    deletar.textContent = item.deletar;
     deletar.innerHTML = `<button class="btn-deletar">🗑️</button>`;
     deletar.addEventListener("click", async function(){
         const resultado = await setDeletar(`http://localhost:8080/api/veiculos/${item.id}`);
-
-        if (isSucess(resultado)){
+        if (resultado.status === 204){
             this.parentElement.remove();
             alert("Veículo deletado com sucesso.");         
         }else{
             alert("Erro ao deletar veículo.");
             }
         });
-    
     tr.appendChild(deletar);
 
     tbody.appendChild(tr);

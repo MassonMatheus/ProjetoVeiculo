@@ -65,7 +65,7 @@
                         <label for="fabricante-modelo">Fabricante:</label>
                         <select id="fabricante-modelo" name="fabricante-modelo" required>
                         </select>
-                        <button class="botao-enviar">Enviar</button>
+                        <button class="botao-enviar" id="salvar-modelo">Enviar</button>
                     </form>
                 </div>  
 
@@ -91,10 +91,11 @@
                         <label for="descricao-veiculo">Descrição do Veiculo:</label>
                         <input type="text" id="descricao-veiculo" name="descricao-veiculo" required>
                         <br>
-                        <button class="botao-enviar">Enviar</button>
+                        <button class="botao-enviar" id="salvar-veiculo">Enviar</button>
                     </form>
                 </div>
             </div>
+            <div id="container">
             <section id = "fabricantes" class = "minha-section">
                 <h2> Fabricantes </h2>
                 <p>Informações sobre fabricantes de veiculos.</p>
@@ -118,7 +119,7 @@
                 </div>
               </div>
             </div>
-            
+        </div>
         </main>
 
         <button onclick="exemploOnClick()">

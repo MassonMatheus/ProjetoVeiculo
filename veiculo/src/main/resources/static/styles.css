@@ -82,11 +82,22 @@ body { font-family: 'Segoe UI', Arial, sans-serif; background: #f5f7fa; color: #
 table {
   width: 100%; /* Faz a tabela ocupar toda a largura disponível */
   border-collapse: collapse; /* Remove espaços entre as células */
-  margin: 20px 0; /* Adiciona espaçamento acima e abaixo da tabela */
+  border-radius: var(--radius-md); /* Adiciona cantos arredondados à tabela */
+  margin: 20px auto; /* Adiciona espaçamento acima e abaixo da tabela */
+  padding: 20px; /* Adiciona espaçamento interno à tabela */
   font-size: 1rem; /* Define um tamanho de fonte padrão */
-  text-align: left; /* Alinha o texto à esquerda */
+  text-align: center; /* Alinha o texto  */
   background-color: #f9f9f9; /* Fundo leve para a tabela */
   border: 1px solid #ddd; /* Adiciona uma borda leve */
+}
+
+#container{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 /* Estilo do cabeçalho da tabela */
