@@ -230,7 +230,7 @@ const validarPlaca = function(placa){
  *  alert(resultado.mensagem);
  * } 
  */
-const validarVeiculo = function(dados){
+const validarVeiculo = function(veiculo){
     const anoAtual = new Date().getFullYear();
     const selectModelo = document.getElementById("modelo-veiculo");
     const selectFabricante = document.getElementById("fabricante-veiculo");
@@ -266,6 +266,10 @@ const validarVeiculo = function(dados){
         return {valido: false, mensagem: "Insira uma cor."};
     }
 
+    if(!veiculo.descricao || veiculo.descricao.trim() === ""){
+        return {valido: false, mensagem: "Insira uma descrição."};
+    }
+
     return {valido: true, mensagem: ""};
 }
 
@@ -283,8 +287,9 @@ const limparFormularioVeiculo = function(){
 // INICIALIZAÇÃO DOS EVENTOS DE VEICULOS
 
 const inicializarEventosVeiculos = function(){
+   
     //evento click no menu veículos
-    document.getElementById("bt-veiculos").addEventListener("click", async function(){
+    document.getElementById("bt-veiculos").addEventListener("click", async function(event){
         setMostrarOcultarElemento(true, ".minha-section");
         setRemoverElementos(".tabela-dados");
         document.querySelector("#veiculos").style.display = "block";
@@ -300,7 +305,7 @@ const inicializarEventosVeiculos = function(){
     });
 
     //evento click no botão Novo Veiculo
-    document.getElementById("novo-veiculo").addEventListener("click", async function(){
+    document.getElementById("novo-veiculo").addEventListener("click", async function(event){
         setMostrarOcultarElemento(true, ".modal-content");
 
         //carrega os fabricantes no select
@@ -316,7 +321,22 @@ const inicializarEventosVeiculos = function(){
         await carregarModelosVeiculo(fabricanteId);
     });
 
-    //Evento Formatação da Placa
+    // EVENTO FORMATAR PLACA
+    document.getElementById("placa-veiculo").addEventListener("input", function(event){
+        let valor = event.target.value.toUpperCase();
+
+        // Remove caracteres inválidos
+        valor = valor.replace(/[^A-Z0-9]/g, '');
+
+        // Limita o tamanho
+        if(valor.length > 7){
+            valor = valor.substring(0, 7);
+        }
+
+        event.target.value = valor;
+    });
+
+    //Evento Verificação da Placa Duplicada
     document.getElementById("placa-veiculo").addEventListener("blur", async function(event){
         const placa = event.target.value.trim().toUpperCase().replace(/-/g, '');
 
@@ -327,14 +347,14 @@ const inicializarEventosVeiculos = function(){
                 //verifica se ja existe
                 const veiculos = await getData("http://localhost:8080/api/veiculos");
                 if(veiculos && veiculos.content){
-                    const placaExoste = veiculos.content.some(function(veiculo){
+                    const placaExiste = veiculos.content.some(function(veiculo){
                         return veiculo.placa === placa;
                     });
 
-                    if(placaExoste){
+                    if(placaExiste){
                        event.target.style.borderColor = "red";
                        event.target.style.backgroundColor = "#ffcccc";
-                       alert('Atenção \n\A placa ${placa} ja esta cadastra no sistema');
+                       alert(`Atenção \n\A placa ${placa} ja esta cadastra no sistema`);
                     }else{
                         event.target.style.borderColor = "";
                         event.target.style.backgroundColor = "";
@@ -389,7 +409,7 @@ const inicializarEventosVeiculos = function(){
 
             //Atualiza a tabela de veiculos
             await AtualizarTabelaVeiculos();
-        }else{
+        } else {
             console.error("Erro ao salvar veículo:", resultado);
 
             //Tratamento Especifico
@@ -400,7 +420,7 @@ const inicializarEventosVeiculos = function(){
                     alert(`Erro ao salvar veículo. A placa ${placa} já está cadastrada.`);
             }else{
                 //Pode ser outro tipo de conflito
-                alert('Registo Duplicado $(mensagemBackend)');
+                alert(`Registo Duplicado ${mensagemBackend}.`);
             }
         }else{
             mostrarErro(resultado);
@@ -410,8 +430,9 @@ const inicializarEventosVeiculos = function(){
 }
 
 // Inicialização Automatica
-if(document.readyState === "loading"){
+if(document.readyState === 'loading'){
     document.addEventListener("DOMContentLoaded", inicializarEventosVeiculos);
-    }else{
-    inicializarEventosVeiculos();
+    } else{
+        //DOM já carregado
+        inicializarEventosVeiculos();
     }
