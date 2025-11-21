@@ -69,9 +69,10 @@ dados.forEach(function(item){
 
     //deletar
     const deletar = document.createElement("td");
-    deletar.textContent = item.deletar;
+    // deletar.textContent = item.deletar;
     deletar.innerHTML = `<button class="btn-deletar">🗑️</button>`;
     deletar.addEventListener("click", async function(){
+        if(confirm("Confirma a exclusão do veículo?")){
         const resultado = await setDeletar(`http://localhost:8080/api/veiculos/${item.id}`);
         if (resultado.status === 204){
             this.parentElement.remove();
@@ -79,6 +80,7 @@ dados.forEach(function(item){
         }else{
             alert("Erro ao deletar veículo.");
             }
+        }
         });
     tr.appendChild(deletar);
 
@@ -150,17 +152,17 @@ const carregarModelosVeiculo = async function(fabricanteId){
     // busca e filtra os modelos
     const dadosModelos = await getData("http://localhost:8080/api/modelos");
     const modelosFiltrados = dadosModelos.filter(function(modelo){
-    return modelo.fabricante.id == fabricanteId;
+        return modelo.fabricante.id == fabricanteId;
     });
 
     // Se não existem modelos para o fabricante, congela o select
     if(modelosFiltrados.length === 0){
-    const optionsSemModelo = document.createElement("option");
-    optionsSemModelo.value = "";
-    optionsSemModelo.textContent = "Nenhum modelo disponível para este fabricante";
-    selectModelo.appendChild(optionsSemModelo);
-    selectModelo.disabled = true; // Congela o Select
-    return;
+        const optionsSemModelo = document.createElement("option");
+        optionsSemModelo.value = "";
+        optionsSemModelo.textContent = "Nenhum modelo disponível para este fabricante";
+        selectModelo.appendChild(optionsSemModelo);
+        selectModelo.disabled = true; // Congela o Select
+        return;
     }
 
     // Habilita o select e adciona opção padrão
@@ -172,10 +174,10 @@ const carregarModelosVeiculo = async function(fabricanteId){
 
     // Adiciona os Modelos filtrados
     modelosFiltrados.forEach(function(modelo){
-    const option = document.createElement("option");
-    option.value = modelo.id;
-    option.textContent = modelo.nome;
-    selectModelo.appendChild(option);
+        const option = document.createElement("option");
+        option.value = modelo.id;
+        option.textContent = modelo.nome;
+        selectModelo.appendChild(option);
     });
 }
 
@@ -345,35 +347,24 @@ const inicializarEventosVeiculos = function(){
             const validacao = validarPlaca(placa);
             if(validacao.valido){
                 //verifica se ja existe
-                const veiculos = await getData("http://localhost:8080/api/veiculos");
-                if(veiculos && veiculos.content){
-                    const placaExiste = veiculos.content.some(function(veiculo){
-                        return veiculo.placa === placa;
-                    });
-
-                    if(placaExiste){
-                       event.target.style.borderColor = "red";
-                       event.target.style.backgroundColor = "#ffcccc";
-                       alert(`Atenção \n\A placa ${placa} ja esta cadastra no sistema`);
-                    }else{
+                const existe = await getData(`http://localhost:8080/api/veiculos/existe/${placa}`);
+                if(existe){
+                    event.target.style.borderColor = "red";
+                    event.target.style.backgroundColor = "#ffcccc";
+                    alert(`Atenção \n\A placa ${placa} ja esta cadastra no sistema`);
+                    }else {
                         event.target.style.borderColor = "";
                         event.target.style.backgroundColor = "";
                     }
                 }
-            }
-        }
-    });
+            }   
+        });
 
     // Evento Submissão do Formulário de Veículo
     document.querySelector("#form-veiculo .botao-enviar").addEventListener("click", async function(event){
         event.preventDefault();
 
-        //Coleta os dados do formulario
-        const fabricanteId = document.getElementById("fabricante-veiculo").value;
-        const fabricanteNome = document.getElementById("fabricante-veiculo").options[
-            document.getElementById("fabricante-veiculo").selectedIndex
-        ].text;
-
+        const modeloId = document.getElementById("modelo-veiculo").value;
         const ano = parseInt(document.getElementById("ano-veiculo").value);
         //remove hifen e espaços, convert para maisuculos
         const placa = document.getElementById("placa-veiculo").value.trim().toUpperCase().replace(/-/g, '');
@@ -389,9 +380,6 @@ const inicializarEventosVeiculos = function(){
             modelo: { id: modeloId}    
         };
 
-        //Log para debug
-        console.log("Novo Veículo:", novoVeiculo);
-
         //Valida os dados do veiculo
         const validacao = validarVeiculo(novoVeiculo);
         if(!validacao.valido){
@@ -406,8 +394,6 @@ const inicializarEventosVeiculos = function(){
             alert("Veículo salvo com sucesso!");
             limparFormularioVeiculo();
             MODAL.style.display = "none";
-
-            //Atualiza a tabela de veiculos
             await AtualizarTabelaVeiculos();
         } else {
             console.error("Erro ao salvar veículo:", resultado);
