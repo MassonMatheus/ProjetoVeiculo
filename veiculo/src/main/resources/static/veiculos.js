@@ -22,7 +22,7 @@ const criarTabelaVeiculo = function(dados){
     trTittle.appendChild(th);
     thead.appendChild(trTittle);
 
-const cabecalho = ["Modelo", "Fabricante", "Placa", "Cor", "Ano", "Descrição", "Deletar"];
+const cabecalho = ["Modelo", "Fabricante", "Placa", "Cor", "Ano", "Descrição", "Ações"];
 const tr = document.createElement("tr");
 cabecalho.forEach(function(campo){
     const th = document.createElement("th");
@@ -67,11 +67,25 @@ dados.forEach(function(item){
     tdDescricao.textContent = item.descricao;
     tr.appendChild(tdDescricao);
 
+    //Acões
+    const tdAcoes = document.createElement("td");
+    tdAcoes.style.display = "flex";
+    tdAcoes.style.gap = "5px";
+
+    //Editar
+    const btnEditar = document.createElement("button");
+    btnEditar.textContent = "✏️";
+    btnEditar.classList.add("btn", "edit");
+    btnEditar.style.cursor = "pointer";
+    btnEditar.addEventListener("click", async function(event){
+        alert(`Função de editar veículo com ID: ${item.id}`);
+    });
+
     //deletar
-    const deletar = document.createElement("td");
-    // deletar.textContent = item.deletar;
-    deletar.innerHTML = `<button class="btn-deletar">🗑️</button>`;
-    deletar.addEventListener("click", async function(){
+    const btnDeletar = document.createElement("button");
+    btnDeletar.textContent = "🗑️";
+    btnDeletar.classList.add("btn", "delete");
+    btnDeletar.addEventListener("click", async function(event){
         if(confirm("Confirma a exclusão do veículo?")){
         const resultado = await setDeletar(`http://localhost:8080/api/veiculos/${item.id}`);
         if (resultado.status === 204){
@@ -79,11 +93,12 @@ dados.forEach(function(item){
             alert("Veículo deletado com sucesso.");         
         }else{
             alert("Erro ao deletar veículo.");
+                }
             }
-        }
         });
-    tr.appendChild(deletar);
-
+    tdAcoes.appendChild(btnEditar);
+    tdAcoes.appendChild(btnDeletar);
+    tr.appendChild(tdAcoes);
     tbody.appendChild(tr);
 })
 

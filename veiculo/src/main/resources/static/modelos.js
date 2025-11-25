@@ -11,7 +11,7 @@ const criarTabelaModelo = function(dados){
     trTittle.appendChild(th);
     thead.appendChild(trTittle);
 
-    const cabecalho = ["Modelos", "Fabricante", "País de Origem", "Deletar"];
+    const cabecalho = ["Modelos", "Fabricante", "País de Origem", "Ações"];
     const tr = document.createElement("tr");
     cabecalho.forEach(function(coluna){
         const th = document.createElement("th");
@@ -43,21 +43,40 @@ const criarTabelaModelo = function(dados){
         tdPaisOrigem.textContent = item.fabricante.paisOrigem;
         tr.appendChild(tdPaisOrigem);
 
-        //ações
-        const deletar = document.createElement("td");
-        deletar.textContent = item.deletar;
-        deletar.innerHTML = `<button class="btn-deletar">🗑️</button>`;
-        deletar.addEventListener("click", async function(){
-            const resultado = await setDeletar(`http://localhost:8080/api/modelos/${item.id}`);
+        //Coluna Ações
+        const tdAcoes = document.createElement("td");
+        tdAcoes.style.display = "flex";
+        tdAcoes.style.gap = "5px";
+
+        //Editar
+        const btnEditar = document.createElement("button");
+        btnEditar.textContent = "✏️";
+        btnEditar.classList.add("btn", "edit");
+        btnEditar.style.cursor = "pointer";
+        btnEditar.addEventListener("click", async function(event){
+              if(confirm("Deseja editar este modelo?") === true){
+                await abrirModalEdicaoModelo(item);
+              }
+        });
+
+        //Deletar
+        const btnDeletar = document.createElement("button");
+        btnDeletar.textContent = "🗑️";
+        btnDeletar.classList.add("btn", "delete");
+        btnDeletar.addEventListener("click", async function(event){
+            if(confirm("Tem certeza que deseja deletar este modelo?") === true){
+           const resultado = await setDeletar(`http://localhost:8080/api/modelos/${item.id}`);
             if(resultado.status === 204){
                 this.parentElement.remove();
                 alert("Modelo deletado com sucesso!");
             }else{
                 alert("Erro ao deletar modelo" );
+                }
             }
         });
-        tr.appendChild(deletar);
-
+        tdAcoes.appendChild(btnEditar);
+        tdAcoes.appendChild(btnDeletar);
+        tr.appendChild(tdAcoes);
         tbody.appendChild(tr);
     })
 

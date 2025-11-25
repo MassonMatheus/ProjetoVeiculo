@@ -49,6 +49,7 @@ body { font-family: 'Segoe UI', Arial, sans-serif; background: #f5f7fa; color: #
 
 .minha-section{
     display: none;
+    width: 100%;
 }
 
 /* Responsividade */
@@ -96,7 +97,7 @@ table {
   align-items: center;
   justify-content: center;
   padding: 20px;
-  max-width: 1200px;
+  width: 1500px;
   margin: 0 auto;
 }
 

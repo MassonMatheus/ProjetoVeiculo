@@ -10,7 +10,7 @@ const criarTabela = function(dados, titulo = "Tabela", classe){
     trTitle.appendChild(th);
     thead.appendChild(trTitle);
 
-    const cabecalho = ["Nome", "País de Origem", "Deletar"];
+    const cabecalho = ["Nome", "País de Origem", "Ações"];
     const tr = document.createElement("tr");
     cabecalho.forEach(function(campo){
         const th = document.createElement("th")
@@ -35,20 +35,40 @@ const criarTabela = function(dados, titulo = "Tabela", classe){
         tdPaisOrigem.textContent = item.paisOrigem;
         tr.appendChild(tdPaisOrigem);
 
+        //Coluna Ações 
+        const tdAcoes = document.createElement("td");
+        tdAcoes.style.display = "flex";
+        tdAcoes.style.gap = "5px";
+
+        //Botão Editar
+        const btnEditar = document.createElement("button");
+        btnEditar.textContent = "✏️";
+        btnEditar.classList.add("btn", "edit");
+        btnEditar.style.cursor = "pointer";
+        btnEditar.addEventListener("click", async function(event){
+           if(confirm("Deseja editar este fabricante?") === true){
+            await abrirModalEdicaoFabricante(item);
+            }
+        });
+
         //Deletar
-        const deletar = document.createElement("td");
-        deletar.textContent = item.deletar;
-        deletar.innerHTML = `<button class="btn-deletar">🗑️</button>`;
-        deletar.addEventListener("click", async function(){
+        const btnDeletar = document.createElement("button");
+        btnDeletar.textContent = "🗑️";
+        btnDeletar.classList.add("btn", "delete");
+        btnDeletar.addEventListener("click", async function(event){
+            if(confirm("Deseja realmente deletar este fabricante?") === true){
             const resultado = await setDeletar(`http://localhost:8080/api/fabricantes/${item.id}`);
             this.parentElement.remove();
             if(resultado.status === 204){
                 alert("Fabricante deletado com sucesso!");
             }else{
                 alert("Erro ao deletar fabricante" );
+                }
             }
         });
-        tr.appendChild(deletar);
+        tdAcoes.appendChild(btnEditar);
+        tdAcoes.appendChild(btnDeletar);
+        tr.appendChild(tdAcoes);
         tbody.appendChild(tr);
     });
     tabela.appendChild(tbody);
