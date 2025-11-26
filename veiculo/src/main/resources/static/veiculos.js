@@ -78,7 +78,9 @@ dados.forEach(function(item){
     btnEditar.classList.add("btn", "edit");
     btnEditar.style.cursor = "pointer";
     btnEditar.addEventListener("click", async function(event){
-        alert(`Função de editar veículo com ID: ${item.id}`);
+        if(confirm("Confirma a edição deste veículo?") === true){
+            await abrirModalEdicaoVeiculo(item);
+        }
     });
 
     //deletar
@@ -88,11 +90,11 @@ dados.forEach(function(item){
     btnDeletar.addEventListener("click", async function(event){
         if(confirm("Confirma a exclusão do veículo?")){
         const resultado = await setDeletar(`http://localhost:8080/api/veiculos/${item.id}`);
-        if (resultado.status === 204){
+        if (!isSucess(resultado)){
             this.parentElement.remove();
             alert("Veículo deletado com sucesso.");         
         }else{
-            alert("Erro ao deletar veículo.");
+           mostrarErro(resultado);
                 }
             }
         });
@@ -301,8 +303,20 @@ const limparFormularioVeiculo = function(){
     document.getElementById("descricao-veiculo").value = "";
 }
 
-// INICIALIZAÇÃO DOS EVENTOS DE VEICULOS
 
+async function abrirModalEdicaoVeiculo(veiculo) {
+    veiculoEmEdicao = veiculo.id; //modo de edição
+    setMostrarOcultarElemento(true, ".modal-content");
+
+    document.getElementById("modal-title").textContent = "Edição de Veículo";
+
+    await carregarFabricantesVeiculo();
+    MODAL.style.display = "block";
+    setMostrarOcultarElemento(false, ".modal-content-veiculo");
+}
+
+let veiculoEmEdicao = null;
+// INICIALIZAÇÃO DOS EVENTOS DE VEICULOS
 const inicializarEventosVeiculos = function(){
    
     //evento click no menu veículos
@@ -323,7 +337,10 @@ const inicializarEventosVeiculos = function(){
 
     //evento click no botão Novo Veiculo
     document.getElementById("novo-veiculo").addEventListener("click", async function(event){
+        veiculoEmEdicao = null; //modo de criação
         setMostrarOcultarElemento(true, ".modal-content");
+
+        document.getElementById("modal-title").textContent = "Cadastro de Veículo";
 
         //carrega os fabricantes no select
         await carregarFabricantesVeiculo();
@@ -337,6 +354,7 @@ const inicializarEventosVeiculos = function(){
         const fabricanteId = event.target.value;
         await carregarModelosVeiculo(fabricanteId);
     });
+
 
     // EVENTO FORMATAR PLACA
     document.getElementById("placa-veiculo").addEventListener("input", function(event){
@@ -405,7 +423,7 @@ const inicializarEventosVeiculos = function(){
         //Envia para a API
         const resultado = await postData("http://localhost:8080/api/veiculos", novoVeiculo);
 
-        if(resultado.status === 201){
+        if(!isSucess(resultado)){
             alert("Veículo salvo com sucesso!");
             limparFormularioVeiculo();
             MODAL.style.display = "none";

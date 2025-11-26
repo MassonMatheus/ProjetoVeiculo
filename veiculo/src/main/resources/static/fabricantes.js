@@ -59,10 +59,10 @@ const criarTabela = function(dados, titulo = "Tabela", classe){
             if(confirm("Deseja realmente deletar este fabricante?") === true){
             const resultado = await setDeletar(`http://localhost:8080/api/fabricantes/${item.id}`);
             this.parentElement.remove();
-            if(resultado.status === 204){
+            if(!isSucess(resultado)){
                 alert("Fabricante deletado com sucesso!");
             }else{
-                alert("Erro ao deletar fabricante" );
+                mostrarErro(resultado);
                 }
             }
         });

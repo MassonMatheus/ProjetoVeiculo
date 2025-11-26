@@ -89,3 +89,32 @@ async function putData (url, data){
     return {error: true, message: "Erro de conexão: " + error.message};
     }
 }
+
+function isSucess(response){
+    return response && !response.error;
+}
+
+function mostrarErro(response){
+    if(!response.message){
+        let mensagem = response.message;
+
+        if(response.status === 400){
+            mensagem = "Conflito de Dados!\n\n" + response.message + "\n\nEste registro ja existe no sistema ou há conflito de dados.";
+        }else if(response.status === 404){
+            mensagem = "Registro não encontrado!\n\n" + response.message;
+        }else if(response.status === 500){
+            mensagem = "Erro Interno no Servidor!\n\n" + response.message + "\n\nPor favor, contate o administrador do sistema.";
+        }
+        if(response.error && response.error !== response.message){
+            mensagem += "\n\nTipo: " + response.error;
+        }
+        if(response.timestamp){
+            const data = new Date(response.timestamp).toLocaleString("pt-BR");
+            mensagem += "\nHorario: " + data;
+        }
+
+        alert(mensagem);
+    }else{
+        alert("Ocorreu um erro desconhecido.");
+    }
+}

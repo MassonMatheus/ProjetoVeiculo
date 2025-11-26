@@ -66,7 +66,7 @@ const criarTabelaModelo = function(dados){
         btnDeletar.addEventListener("click", async function(event){
             if(confirm("Tem certeza que deseja deletar este modelo?") === true){
            const resultado = await setDeletar(`http://localhost:8080/api/modelos/${item.id}`);
-            if(resultado.status === 204){
+            if(!isSucess(resultado)){
                 this.parentElement.remove();
                 alert("Modelo deletado com sucesso!");
             }else{

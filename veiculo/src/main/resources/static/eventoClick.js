@@ -74,11 +74,12 @@ document.getElementById("salvar-fabricante").addEventListener("click", async fun
         resultado = await postData("http://localhost:8080/api/fabricantes", fabricanteData);
     }
    
-   
-    if(resultado.status === 201){
-        alert("Fabricante salvo com sucesso!");
+    if(!isSucess(resultado)){
+        const mensagem = fabricanteEmEdicao ? "Fabricante atualizado com sucesso!" : "Fabricante Salvo com sucesso!";
+        alert(mensagem);
         document.getElementById("nome-fabricante").value = "";
         document.getElementById("pais-fabricante").value = "";
+        fabricanteEmEdicao = null;
         MODAL.style.display = "none";
 
         // recarregar a pagina
@@ -88,7 +89,7 @@ document.getElementById("salvar-fabricante").addEventListener("click", async fun
         document.querySelector("#fabricantes").appendChild(criarTabela(dadosFabricantes, "Fabricantes", "tabela-dados"));
 
     }else{
-        alert ("Erro ao salvar fabricante. erro: " + resultado.message);
+        mostrarErro(resultado);
     }
 });
 
@@ -162,8 +163,15 @@ document.getElementById("salvar-modelo").addEventListener("click", async functio
     const fabricante = document.getElementById("fabricante-modelo").value;
     const novoModelo = {nome: nome, fabricante: {id: fabricante}};   
 
-    const resultado = await postData("http://localhost:8080/api/modelos", novoModelo);
-    if(resultado.status === 201){
+    let resultado;
+    if(modeloEmEdicao){
+        // Modo de edição - usa PUT
+        resultado = await putData(`http://localhost:8080/api/modelos/${modeloEmEdicao}`, novoModelo);
+    }else {
+        // Modo de criação - usa POST
+        resultado = await postData("http://localhost:8080/api/modelos", novoModelo);
+    }
+    if(!isSucess(resultado)){
         alert("Modelo salvo com sucesso!");
         document.getElementById("nome-modelo").value = "";
         document.getElementById("fabricante-modelo").value = "";
@@ -196,12 +204,4 @@ document.getElementById("bt-modelos").addEventListener("click", async function(e
     document.querySelector("#modelos").style.display = "block";
     const dadosModelos = await getData("http://localhost:8080/api/modelos");
     document.querySelector("#modelos").appendChild(criarTabelaModelo(dadosModelos));
-});
-
-document.getElementById("bt-veiculos").addEventListener("click", async function(event){
-    setMostrarOcultarElemento(true, ".minha-section");
-    setRemoverElementos(".tabela-dados");
-    document.querySelector("#veiculos").style.display = "block";
-    const dadosVeiculos = await getData("http://localhost:8080/api/veiculos");
-    document.querySelector("#veiculos").appendChild(criarTabelaVeiculo(dadosVeiculos));
 });
